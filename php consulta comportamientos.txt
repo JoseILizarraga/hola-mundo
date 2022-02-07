@@ -1,0 +1,70 @@
+			IF (
+							((temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND temperatura.valor != '0' AND temperatura.valor != 'VVV' AND temperatura.valor != 'FFF' AND temperatura.valor != 'MMM' AND temperatura.valor != NULL) OR
+						  	((oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND oxigeno.valor != '0' AND oxigeno.valor != 'VVV' AND oxigeno.valor != 'FFF' AND oxigeno.valor != 'MMM' AND oxigeno.valor != NULL) OR
+						  	((sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND sat_oxigeno.valor != '0' AND sat_oxigeno.valor != 'VVV' AND sat_oxigeno.valor != 'FFF' AND sat_oxigeno.valor != 'MMM' AND sat_oxigeno.valor != NULL)						  
+							  , 'peligro', IF (
+							((temperatura.valor > MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND temperatura.valor < MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((oxigeno.valor > MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND oxigeno.valor < MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((sat_oxigeno.valor > MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND sat_oxigeno.valor < MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)				  
+							  , 'precausion', '')) AS estado
+
+
+
+SELECT cordenada_viaje.idcordenada_viaje, cordenada_viaje.latitud, cordenada_viaje.longitud, fecha, hora,
+						IF (
+							((temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND temperatura.valor != '0' AND temperatura.valor != 'VVV' AND temperatura.valor != 'FFF' AND temperatura.valor != 'MMM' AND temperatura.valor != NULL) OR
+						  	((oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND oxigeno.valor != '0' AND oxigeno.valor != 'VVV' AND oxigeno.valor != 'FFF' AND oxigeno.valor != 'MMM' AND oxigeno.valor != NULL) OR
+						  	((sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND sat_oxigeno.valor != '0' AND sat_oxigeno.valor != 'VVV' AND sat_oxigeno.valor != 'FFF' AND sat_oxigeno.valor != 'MMM' AND sat_oxigeno.valor != NULL)						  
+							  , 'peligro', IF (
+							((temperatura.valor > MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND temperatura.valor < MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((oxigeno.valor > MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND oxigeno.valor < MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((sat_oxigeno.valor > MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND sat_oxigeno.valor < MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)				  
+							  , 'precausion', 'orden')) AS estado
+              FROM cordenada_viaje
+              INNER JOIN embarques ON embarques.idembarques=cordenada_viaje.idembarques
+              WHERE cordenada_viaje.fecha BETWEEN embarqus.fecha_salida AND embarques.fecha_entrega
+              AND cordenada_viaje.hora BETWEEN embarques.hora_salida AND embarques.hora_entrega
+              AND embarques.idembarques=112;
+
+
+
+
+SELECT cordenada_viaje.idcordenada_viaje, cordenada_viaje.latitud, cordenada_viaje.longitud,
+						IF (
+							((temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND temperatura.valor != '0' AND temperatura.valor != 'VVV' AND temperatura.valor != 'FFF' AND temperatura.valor != 'MMM' AND temperatura.valor != NULL) OR
+						  	((oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND oxigeno.valor != '0' AND oxigeno.valor != 'VVV' AND oxigeno.valor != 'FFF' AND oxigeno.valor != 'MMM' AND oxigeno.valor != NULL) OR
+						  	((sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND sat_oxigeno.valor != '0' AND sat_oxigeno.valor != 'VVV' AND sat_oxigeno.valor != 'FFF' AND sat_oxigeno.valor != 'MMM' AND sat_oxigeno.valor != NULL)						  
+							  , 'peligro', IF (
+							((temperatura.valor > MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND temperatura.valor < MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((oxigeno.valor > MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND oxigeno.valor < MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((sat_oxigeno.valor > MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND sat_oxigeno.valor < MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)				  
+							  , 'precausion', 'orden')) AS estado
+                    FROM sondas
+                    INNER JOIN rangos_sonda ON rangos_sonda.idsonda = sondas.idsonda
+                    INNER JOIN unidades ON unidades.idcratruck = sondas.idcratruck
+                    INNER JOIN embarques ON embarques.idunidades = unidades.idunidades
+                    INNER JOIN cordenada_viaje ON cordenada_viaje.idembarques = embarques.idembarques
+                    INNER JOIN mediciones ON mediciones.idSonda = sondas.idsonda
+                    LEFT JOIN temperatura ON temperatura.idmedicion  = mediciones.idmedicion
+                    LEFT JOIN oxigeno ON oxigeno.idmedicion = mediciones.idmedicion
+                    LEFT JOIN sat_oxigeno ON sat_oxigeno.idmedicion = mediciones.idmedicion
+                    WHERE cordenada_viaje.fecha BETWEEN embarques.fecha_salida AND embarques.fecha_entrega
+                    AND cordenada_viaje.hora BETWEEN embarques.hora_salida AND embarques.hora_entrega
+                    AND embarques.idembarques=112;
+
+
+
+(
+CASE 
+							WHEN
+							((temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND temperatura.valor != '0' AND temperatura.valor != 'VVV' AND temperatura.valor != 'FFF' AND temperatura.valor != 'MMM' AND temperatura.valor != NULL) OR
+						  	((oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND oxigeno.valor != '0' AND oxigeno.valor != 'VVV' AND oxigeno.valor != 'FFF' AND oxigeno.valor != 'MMM' AND oxigeno.valor != NULL) OR
+						  	((sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)) AND sat_oxigeno.valor != '0' AND sat_oxigeno.valor != 'VVV' AND sat_oxigeno.valor != 'FFF' AND sat_oxigeno.valor != 'MMM' AND sat_oxigeno.valor != NULL)
+							THEN 'peligro'
+							
+							WHEN
+((temperatura.valor > MAX(CASE WHEN parametro = 1 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND temperatura.valor <= MAX(CASE WHEN parametro = 1 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR temperatura.valor >= MAX(CASE WHEN parametro = 1 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND temperatura.valor < MAX(CASE WHEN parametro = 1 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((oxigeno.valor > MAX(CASE WHEN parametro = 2 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND oxigeno.valor <= MAX(CASE WHEN parametro = 2 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR oxigeno.valor >= MAX(CASE WHEN parametro = 2 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND oxigeno.valor < MAX(CASE WHEN parametro = 2 THEN ROUND(maxpeligroso, 1) ELSE NULL END) OR
+							((sat_oxigeno.valor > MAX(CASE WHEN parametro = 3 THEN ROUND(minpeligroso, 1) ELSE NULL END) AND sat_oxigeno.valor <= MAX(CASE WHEN parametro = 3 THEN ROUND(minalarmante, 1) ELSE NULL END)) OR sat_oxigeno.valor >= MAX(CASE WHEN parametro = 3 THEN ROUND(maxalarmante, 1) ELSE NULL END)) AND sat_oxigeno.valor < MAX(CASE WHEN parametro = 3 THEN ROUND(maxpeligroso, 1) ELSE NULL END)
+							THEN 'precausion'	
+END) AS estado,
